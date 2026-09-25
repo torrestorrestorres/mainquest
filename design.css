@@ -29,11 +29,17 @@ Font sizes use clamp(min, fluid, max):
 :root {
     /* ---------- Colors ---------- */
     --text-color-dark: #111A19;
-    --text-color-light: #FFFFFF;
+    --text-color-light: #FAFAFA;
     --text-color-accent: #886830;
     --background-light: var(--text-color-light);
     --background-dark: var(--text-color-dark);
-    --badge-background: rgba(17, 26, 25, 0.85);
+    --badge-background: var(--text-color-accent);
+    --badge-color: var(--text-color-light);
+    /* how far the badge sticks out to the right of the nav link */
+    --badge-offset-x: 14px;
+    /* badge jumps once per interval */
+    --badge-bounce-interval: 5s;
+    --badge-bounce-height: 6px;
 
     /* ---------- Fonts ---------- */
     --font-family: "Montserrat", system-ui, sans-serif;
@@ -99,6 +105,13 @@ Font sizes use clamp(min, fluid, max):
     /* slow ken burns zoom of the background */
     --hero-zoom: 1.08;
     --hero-zoom-duration: 20s;
+    /* dark, blurred triangle behind the text (top left -> bottom right) */
+    /* position of the diagonal (50% = exactly corner to corner, more = covers more) */
+    --hero-overlay-edge: 50%;
+    /* width of the soft edge */
+    --hero-overlay-fade: 15%;
+    --hero-overlay-opacity: 45%;
+    --hero-overlay-blur: 12px;
 
     /* partner logos */
     --partner-mark-height: 48px;
@@ -128,6 +141,13 @@ Font sizes use clamp(min, fluid, max):
     --faq-gap: var(--space-s);
     --faq-icon-size: 22px;
     --faq-open-duration: 300ms;
+    /* desktop: answer panel over the image */
+    --faq-panel-start: 50%;
+    /* how much of the dark color covers the image (100% = solid) */
+    --faq-panel-opacity: 85%;
+    --faq-panel-background: color-mix(in srgb, var(--background-dark) var(--faq-panel-opacity), transparent);
+    --faq-panel-border: rgba(255, 255, 255, 0.1);
+    --faq-panel-text-width: 560px;
 
     /* team */
     --team-columns: 3;

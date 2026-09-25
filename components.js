@@ -209,7 +209,8 @@ const parseCount = (value) => {
 };
 
 /* Accordion entry. Number is generated from the position unless `number` is set.
-   All items with the same `group` (default "faq") are exclusive: only one is open. */
+   All items with the same `group` (default "faq") are exclusive: only one is open.
+   The answer repeats number + heading, only shown in the desktop panel (styles.css). */
 const FAQ_ICON = "imgs/accordionPlus.svg";
 
 class MqFaqItem extends MqElement {
@@ -224,7 +225,13 @@ class MqFaqItem extends MqElement {
                     <span class="faq-question">${this.attr("heading")}</span>
                     <img class="faq-icon" src="${this.attr("icon", FAQ_ICON)}" alt="">
                 </summary>
-                <div class="faq-answer">${content}</div>
+                <div class="faq-answer">
+                    <p class="faq-answer-heading" aria-hidden="true">
+                        <span class="faq-answer-number">${escapeHtml(number)}</span>
+                        ${this.attr("heading")}
+                    </p>
+                    <div class="faq-answer-text">${content}</div>
+                </div>
             </details>
         `;
     }

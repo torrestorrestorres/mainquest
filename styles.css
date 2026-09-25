@@ -141,7 +141,7 @@ mq-label {
     display: inline-flex;
     align-items: stretch;
     font-size: var(--font-size-text);
-    color: var(--text-color-accent);
+    color: var(--text-color-dark);
     transition: transform var(--transition);
 }
 
@@ -234,12 +234,27 @@ mq-label {
     content: attr(data-badge);
     position: absolute;
     top: -1.1em;
-    right: 0;
+    right: calc(var(--badge-offset-x) * -1);
     padding: 1px 6px;
     border-radius: 999px;
     background: var(--badge-background);
+    color: var(--badge-color);
     font-size: 10px;
     line-height: 1.4;
+    animation: badge-bounce var(--badge-bounce-interval) ease-in-out infinite;
+}
+
+/* one short jump at the start of each interval, then rest */
+@keyframes badge-bounce {
+    0%, 12%, 100% {
+        transform: translateY(0);
+    }
+    4% {
+        transform: translateY(calc(var(--badge-bounce-height) * -1));
+    }
+    8% {
+        transform: translateY(calc(var(--badge-bounce-height) * -0.3));
+    }
 }
 
 mq-nav-toggle {
@@ -311,6 +326,22 @@ mq-nav-toggle {
     to {
         transform: scale(var(--hero-zoom));
     }
+}
+
+/* triangle overlay for better text contrast: darkens + blurs the image behind it.
+   "to top right": the 50% line runs exactly from the top left to the bottom right corner */
+#hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    mask-image: linear-gradient(
+        to top right,
+        #000 calc(var(--hero-overlay-edge) - var(--hero-overlay-fade)),
+        transparent calc(var(--hero-overlay-edge) + var(--hero-overlay-fade))
+    );
+    background: color-mix(in srgb, var(--background-dark) var(--hero-overlay-opacity), transparent);
+    backdrop-filter: blur(var(--hero-overlay-blur));
 }
 
 .hero-content {
@@ -679,6 +710,71 @@ mq-faq-item {
     padding: 0 var(--space-l) var(--space-s) calc(var(--gutter) + var(--faq-number-width) + var(--faq-gap));
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-regular);
+    backdrop-filter: blur(4px);
+}
+
+/* number + heading inside the answer: only used in the desktop panel */
+.faq-answer-heading {
+    display: none;
+}
+
+.faq-item[open] .faq-number {
+    color: var(--text-color-accent);
+}
+
+/* no browser scroll correction when the list changes height (caused jumps + nav popping in) */
+.accordion {
+    overflow-anchor: none;
+}
+
+/* desktop: the open answer replaces the image (right half), the list never changes height */
+@media (min-width: 901px) {
+    #faq {
+        position: relative;
+    }
+
+    .faq-answer {
+        position: absolute;
+        inset: 0 0 0 var(--faq-panel-start);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        gap: var(--space-m);
+        padding: var(--space-3xl) var(--gutter);
+        overflow-y: auto;
+        border-left: 1px solid var(--faq-panel-border);
+        background: var(--faq-panel-background);
+        font-size: var(--font-size-lead);
+        transition: opacity var(--faq-open-duration) ease;
+    }
+
+    /* fade in when opening, fade out when closing -> crossfade when switching */
+    @starting-style {
+        .faq-item[open] .faq-answer {
+            opacity: 0;
+        }
+    }
+
+    .faq-item:not([open]) .faq-answer {
+        opacity: 0;
+    }
+
+    .faq-answer-heading {
+        display: flex;
+        gap: var(--faq-gap);
+        font-size: var(--font-size-title);
+        font-weight: var(--font-weight-bold);
+        line-height: var(--line-height-tight);
+    }
+
+    .faq-answer-number {
+        font-weight: var(--font-weight-thin);
+        color: var(--text-color-accent);
+    }
+
+    .faq-answer-text {
+        max-width: var(--faq-panel-text-width);
+    }
 }
 
 /* ========== Team (mq-team-member) ========== */
