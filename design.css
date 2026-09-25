@@ -1,0 +1,129 @@
+/*
+
+This File contains common used variables, including:
+
+    Colors, Fonts, Sizes, Spacing, Component-Settings
+
+Font sizes use clamp(min, fluid, max):
+    max   = value from the design (1440px viewport)
+    fluid = max / 1440 * 100vw
+    min   = smallest size on mobile
+
+*/
+
+@font-face {
+    font-family: "Montserrat";
+    src: url("fonts/Montserrat-VariableFont_wght.ttf") format("truetype");
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Montserrat";
+    src: url("fonts/Montserrat-Italic-VariableFont_wght.ttf") format("truetype");
+    font-weight: 100 900;
+    font-style: italic;
+    font-display: swap;
+}
+
+:root {
+    /* ---------- Colors ---------- */
+    --text-color-dark: #111A19;
+    --text-color-light: #FFFFFF;
+    --text-color-accent: #886830;
+    --background-light: var(--text-color-light);
+    --background-dark: var(--text-color-dark);
+    --badge-background: rgba(17, 26, 25, 0.85);
+
+    /* ---------- Fonts ---------- */
+    --font-family: "Montserrat", system-ui, sans-serif;
+    --font-weight-thin: 200;
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    /* headings are bold */
+    --font-size-heading: clamp(44px, 6.67vw, 96px);
+    /* big texts are semibold */
+    --font-size-big: clamp(34px, 4.44vw, 64px);
+    --font-size-title: clamp(30px, 3.33vw, 48px);
+    --font-size-medium: clamp(26px, 2.78vw, 40px);
+    --font-size-large: clamp(20px, 2.22vw, 32px);
+    --font-size-lead: clamp(18px, 1.67vw, 24px);
+    /* text is medium*/
+    --font-size-text: clamp(16px, 1.39vw, 20px);
+    --font-size-small: 16px;
+    --font-size-xs: 14px;
+
+    --line-height-tight: 1.1;
+    --line-height-text: 1.3;
+
+    /* ---------- Spacing ---------- */
+    --space-xs: 8px;
+    --space-s: 16px;
+    --space-m: 24px;
+    --space-l: 32px;
+    --space-xl: 48px;
+    --space-2xl: 64px;
+    --space-3xl: 96px;
+
+    /* left/right page padding */
+    --gutter: clamp(16px, 3.33vw, 48px);
+    /* vertical distance between sections */
+    --section-spacing: clamp(64px, 7.8vw, 112px);
+
+    --transition: 200ms ease;
+
+    /* ---------- Components ---------- */
+
+    /* label (exclamation icon + text) */
+    --label-icon-size: 40px;
+
+    /* navigation */
+    --nav-logo-height: 52px;
+    --nav-gap: clamp(32px, 8.7vw, 125px);
+    --nav-link-gap: clamp(24px, 3.3vw, 48px);
+    --font-size-nav: 18px;
+
+    /* hero */
+    --hero-min-height: 100svh;
+    --hero-padding-top: 180px;
+    --hero-blur: 6px;
+    --hero-brightness: 0.7;
+    --hero-text-width: 720px;
+
+    /* partner logos */
+    --partner-mark-height: 48px;
+    --marquee-duration: 30s;
+    --marquee-gap: var(--space-2xl);
+    --marquee-fade: var(--space-xl);
+    --marquee-min-width: 360px;
+
+    /* gallery (cqi = % of section width, row fits exactly at 1440px) */
+    --gallery-height: clamp(280px, 36.4cqi, 525px);
+    --gallery-gap: clamp(16px, 4.7cqi, 69px);
+
+    /* dashed lines */
+    --dash-length: 12px;
+    --dash-gap: 8px;
+    --dash-thickness: 2px;
+
+    /* numbers */
+    --stat-min-width: 260px;
+    --stats-gap: clamp(24px, 4.4vw, 64px);
+
+    /* faq / accordion */
+    --faq-number-width: clamp(28px, 3vw, 44px);
+    --faq-gap: var(--space-s);
+    --faq-icon-size: 22px;
+
+    /* team */
+    --team-columns: 3;
+    --team-gap: var(--space-xl);
+}
+
+.highlighted{
+    color: var(--text-color-accent);
+}

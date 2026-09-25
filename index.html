@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Quest</title>
+    <link rel="stylesheet" href="design.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="components.js" defer></script>
+</head>
+<body>
+
+<nav class="main-nav">
+    <a class="nav-logo" href="#hero">
+        <img src="imgs/wortlogo.png" alt="MainQuest" width="166" height="52">
+    </a>
+    <mq-nav-toggle controls="nav-links"></mq-nav-toggle>
+    <ul class="nav-links" id="nav-links">
+        <li><a href="#whatIs">Next Quest</a></li>
+        <li><a href="#">Für Creator</a></li>
+        <li><a href="#" data-badge="36">Unsere Events</a></li>
+        <li><a href="#">Für Brands</a></li>
+        <li><a href="#team">Über Uns</a></li>
+    </ul>
+</nav>
+
+<section id="hero">
+    <div class="hero-content">
+        <mq-label variant="light">Next Gen Event Agency</mq-label>
+        <h1 class="heading-xl">Bereit für<br> deine<br> nächste MainQuest?</h1>
+    </div>
+    <div class="hero-footer">
+        <p class="hero-text">
+            MainQuest steht für kreative Konzepte, außergewöhnliche Experiences und Events,
+            die genauso einzigartig sind wie die Creator und Communities, für die sie entstehen.
+        </p>
+        <a class="button" href="#whatIs">
+            <span class="button-label">Starte Quest</span>
+            <span class="button-icon" aria-hidden="true">→</span>
+        </a>
+    </div>
+</section>
+
+<section id="partners">
+    <div class="logo-and-text">
+        <img src="imgs/bildlogo.png" alt="" width="152" height="48">
+        <p>
+            Wir konnten durch<br> unsere Projekte schon<br>
+            <strong class="highlighted">16,4M</strong> Leute erreichen
+        </p>
+    </div>
+    <div class="scrolling-partner-img-display">
+        <mq-marquee duration="30s">
+            <img src="imgs/partners/holy.png" alt="HOLY" width="165" height="45">
+            <img src="imgs/partners/xperion.png" alt="xperion" width="231" height="85">
+            <img src="imgs/partners/logi.png" alt="Logitech G" width="182" height="102">
+            <img src="imgs/partners/SK-Gaming-cropped.png" alt="SK Gaming" width="220" height="45">
+        </mq-marquee>
+    </div>
+</section>
+
+<section id="whatIs">
+    <div class="whatis-head">
+        <mq-label>Was ist MainQuest?</mq-label>
+        <div class="whatis-row">
+            <h2 class="heading-l">
+                Die nächste <span class="highlighted">Story</span><br>
+                wartet nicht im Feed.<br>
+                Mach dich bereit für<br>
+                die nächste <span class="highlighted">MainQuest.</span>
+            </h2>
+            <a class="link-arrow dashed-line" href="#">
+                <span aria-hidden="true">→</span> Zur Next Quest
+            </a>
+        </div>
+    </div>
+    <div class="gallery">
+        <img src="imgs/vibes/dj.png" alt="DJ-Mischpult in blauem Licht" width="411" height="525">
+        <img src="imgs/vibes/party.png" alt="Menschenmenge vor einer beleuchteten Bühne" width="411" height="525">
+        <img src="imgs/vibes/ferriswheel.png" alt="Beleuchtetes Riesenrad bei Nacht" width="411" height="525">
+        <img src="imgs/vibes/nightclub.png" alt="Club mit Leinwand „Imagine Every Thing“" width="411" height="525">
+    </div>
+</section>
+
+<section id="numbers">
+    <mq-label>Unsere Zahlen</mq-label>
+    <div class="stats">
+        <mq-stat value="16,4M Leute" heading="Klingt viel, wa?">
+            Von exklusiven Creator-Events über Community Experiences bis hin zu
+            außergewöhnlichen Brand Activations: Wir schaffen die Bühne für deine nächste Story.
+        </mq-stat>
+        <mq-stat value="30+" heading="So viele sind schon glücklich!">
+            MainQuest verwandelt Begegnungen in Erlebnisse, Erlebnisse in Geschichten
+            und Geschichten in Content.
+        </mq-stat>
+        <mq-stat value="100%" heading="Das ist unsere Überzeugung.">
+            MainQuest ist die Event-Company für die nächste Generation von Content Creatorn.
+            Von der ersten Idee bis zum fertigen Content schaffen wir Events, die Creator erleben,
+            Communities verbinden und Geschichten erzählen.
+        </mq-stat>
+    </div>
+</section>
+
+<section id="faq">
+    <div class="faq-content">
+        <h2 class="heading-m">
+            Dinge in denen wir<br> gut sind
+        </h2>
+        <div class="accordion">
+            <mq-faq-item heading="Bevor deine Quest beginnt">...</mq-faq-item>
+            <mq-faq-item heading="Alles, was du wissen musst" open>
+                Content-Creation auf dich und dein Content angepasst.
+            </mq-faq-item>
+            <mq-faq-item heading="Noch Fragen? Hier entlang.">...</mq-faq-item>
+            <mq-faq-item heading="Dein Guide zur nächsten Quest">...</mq-faq-item>
+            <mq-faq-item heading="Deine Fragen. Unsere Antworten.">...</mq-faq-item>
+        </div>
+    </div>
+    <img class="faq-image" src="imgs/vibes/accordionParty.png" alt="Feiernde Menschen auf einem Event" width="720" height="865" loading="lazy">
+</section>
+
+<section id="team">
+    <h2 class="heading-xl highlighted">Grüße vom Team</h2>
+    <div class="team-grid">
+        <mq-team-member name="Finja" role="Chief Executive Officer" img="imgs/team/finja.png"></mq-team-member>
+        <mq-team-member name="Marius" role="Chief Operating Officer" img="imgs/team/marius.png"></mq-team-member>
+        <mq-team-member name="Merlin" role="Chief Finance Officer" img="imgs/team/merlin.png"></mq-team-member>
+        <mq-team-member name="Julian" role="Concept &amp; Creative Support" img="imgs/team/julian.png"></mq-team-member>
+        <mq-team-member name="Björn" role="Creative Designer" img="imgs/team/bjoern.png"></mq-team-member>
+    </div>
+</section>
+
+<footer></footer>
+</body>
+</html>
