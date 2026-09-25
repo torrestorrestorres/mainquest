@@ -53,7 +53,7 @@ strong {
 }
 
 /* hide components until components.js has rendered them */
-:is(mq-label, mq-marquee, mq-stat, mq-faq-item, mq-team-member, mq-nav-toggle):not(:defined) {
+:is(mq-label, mq-marquee, mq-carousel, mq-stat, mq-faq-item, mq-team-member, mq-nav-toggle):not(:defined) {
     visibility: hidden;
 }
 
@@ -400,20 +400,35 @@ mq-marquee:hover .marquee-group {
     display: flex;
     gap: var(--gallery-gap);
     overflow-x: auto;
-    scroll-snap-type: x proximity;
     scrollbar-width: none;
+    cursor: grab;
 }
 
 .gallery::-webkit-scrollbar {
     display: none;
 }
 
+.gallery.is-dragging {
+    cursor: grabbing;
+}
+
+.gallery:focus-visible {
+    outline: 2px solid var(--text-color-accent);
+    outline-offset: 4px;
+}
+
+/* portrait crop + rounded corners, focus point per image via style="--gallery-focus: 30% 50%" */
 .gallery img {
     flex-shrink: 0;
-    width: auto;
-    height: var(--gallery-height);
+    width: var(--gallery-item-width);
     max-width: none;
-    scroll-snap-align: start;
+    height: auto;
+    aspect-ratio: var(--gallery-item-ratio);
+    object-fit: cover;
+    object-position: var(--gallery-focus, center);
+    border-radius: var(--gallery-radius);
+    user-select: none;
+    -webkit-user-drag: none;
 }
 
 /* ========== Numbers (mq-stat) ========== */
@@ -627,6 +642,15 @@ mq-team-member {
     .nav-links a[data-badge]::after {
         position: static;
         margin-left: var(--space-xs);
+    }
+
+    /* gallery: snap images on touch devices */
+    .gallery {
+        scroll-snap-type: x mandatory;
+    }
+
+    .gallery img {
+        scroll-snap-align: center;
     }
 
     /* faq: image below the accordion */

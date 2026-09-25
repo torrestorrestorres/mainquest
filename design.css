@@ -1,7 +1,6 @@
 /*
 
 This File contains common used variables, including:
-
     Colors, Fonts, Sizes, Spacing, Component-Settings
 
 Font sizes use clamp(min, fluid, max):
@@ -101,9 +100,11 @@ Font sizes use clamp(min, fluid, max):
     --marquee-fade: var(--space-xl);
     --marquee-min-width: 360px;
 
-    /* gallery (cqi = % of section width, row fits exactly at 1440px) */
-    --gallery-height: clamp(280px, 36.4cqi, 525px);
-    --gallery-gap: clamp(16px, 4.7cqi, 69px);
+    /* gallery carousel (cqi = % of section width, so the row is always wider than the screen) */
+    --gallery-item-width: clamp(240px, 28.5cqi, 640px);
+    --gallery-item-ratio: 411 / 525;
+    --gallery-gap: clamp(16px, 4.8cqi, 69px);
+    --gallery-radius: 24px;
 
     /* dashed lines */
     --dash-length: 12px;

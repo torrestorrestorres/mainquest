@@ -9,6 +9,7 @@ Each component renders once from its attributes + inner content.
 
     <mq-label variant="light">Text</mq-label>
     <mq-marquee duration="30s" copies="2"> logos </mq-marquee>
+    <mq-carousel start="center"> images </mq-carousel>
     <mq-stat value="30+" heading="Title"> text </mq-stat>
     <mq-faq-item heading="Question" open> answer </mq-faq-item>
     <mq-team-member name="Name" role="Role" img="path.png"></mq-team-member>
@@ -70,6 +71,59 @@ class MqMarquee extends MqElement {
         return Array.from({ length: copies }, (_, index) => `
             <div class="marquee-group"${index > 0 ? ' aria-hidden="true"' : ""}>${content}</div>
         `).join("");
+    }
+}
+
+/* Horizontal scroller: native scroll for touch/trackpad + drag with the mouse.
+   start="center" scrolls to the middle initially, so both edges are cut off. */
+class MqCarousel extends MqElement {
+    render(content) {
+        return content;
+    }
+
+    afterRender() {
+        if (!this.hasAttribute("tabindex")) this.tabIndex = 0;
+
+        if (this.getAttribute("start") === "center") {
+            this.scrollLeft = (this.scrollWidth - this.clientWidth) / 2;
+        }
+
+        this.#enableMouseDrag();
+    }
+
+    #enableMouseDrag() {
+        let startX = 0;
+        let startScroll = 0;
+        let moved = false;
+
+        this.addEventListener("pointerdown", (event) => {
+            if (event.pointerType !== "mouse" || event.button !== 0) return;
+            startX = event.clientX;
+            startScroll = this.scrollLeft;
+            moved = false;
+            this.setPointerCapture(event.pointerId);
+            this.classList.add("is-dragging");
+        });
+
+        this.addEventListener("pointermove", (event) => {
+            if (!this.classList.contains("is-dragging")) return;
+            const distance = event.clientX - startX;
+            if (Math.abs(distance) > 3) moved = true;
+            this.scrollLeft = startScroll - distance;
+        });
+
+        const stopDrag = () => this.classList.remove("is-dragging");
+        this.addEventListener("pointerup", stopDrag);
+        this.addEventListener("pointercancel", stopDrag);
+
+        // no native image dragging, no click after a drag
+        this.addEventListener("dragstart", (event) => event.preventDefault());
+        this.addEventListener("click", (event) => {
+            if (!moved) return;
+            event.preventDefault();
+            event.stopPropagation();
+            moved = false;
+        }, true);
     }
 }
 
@@ -153,6 +207,7 @@ class MqNavToggle extends MqElement {
 
 customElements.define("mq-label", MqLabel);
 customElements.define("mq-marquee", MqMarquee);
+customElements.define("mq-carousel", MqCarousel);
 customElements.define("mq-stat", MqStat);
 customElements.define("mq-faq-item", MqFaqItem);
 customElements.define("mq-team-member", MqTeamMember);
