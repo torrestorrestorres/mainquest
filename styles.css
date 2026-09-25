@@ -893,11 +893,6 @@ mq-team-member:nth-child(even):not(.is-visible) .team-card {
         display: flex;
     }
 
-    .nav-links a[data-badge]::after {
-        position: static;
-        margin-left: var(--space-xs);
-    }
-
     /* gallery: snap images on touch devices */
     .gallery {
         scroll-snap-type: x mandatory;
