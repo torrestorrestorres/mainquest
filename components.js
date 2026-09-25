@@ -26,6 +26,24 @@ const escapeHtml = (value = "") =>
         "'": "&#39;",
     })[char]);
 
+const prefersReducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* Calls callback once, as soon as the element scrolls into view */
+const onceVisible = (element, callback, threshold = 0.3) => {
+    const observer = new IntersectionObserver((entries) => {
+        if (!entries[0].isIntersecting) return;
+        observer.disconnect();
+        callback();
+    }, { threshold });
+    observer.observe(element);
+};
+
+/* Position of an element among its siblings of the same tag (0-based) */
+const siblingIndex = (element) =>
+    [...element.parentElement.children]
+        .filter((el) => el.localName === element.localName)
+        .indexOf(element);
+
 /* Base class: renders exactly once, passes the original inner HTML to render() */
 class MqElement extends HTMLElement {
     #rendered = false;
@@ -127,16 +145,68 @@ class MqCarousel extends MqElement {
     }
 }
 
-/* Big number with dashed line, heading and text */
+/* Big number with dashed line, heading and text.
+   When scrolled into view, the first number in `value` counts up (e.g. "16,4M Leute" -> 0,0 … 16,4)
+   and the dashed line draws itself. `no-count` disables counting, `duration` sets the time in ms. */
 class MqStat extends MqElement {
+    #count = null;
+
     render(content) {
+        const value = this.getAttribute("value") ?? "";
+        const counts = !this.hasAttribute("no-count") && !prefersReducedMotion();
+        this.#count = counts ? parseCount(value) : null;
+
         return `
-            <p class="stat-value dashed-line">${this.attr("value")}</p>
+            <p class="stat-value dashed-line">
+                <span class="visually-hidden">${escapeHtml(value)}</span>
+                <span class="stat-number" aria-hidden="true">${escapeHtml(this.#count ? this.#count.format(0) : value)}</span>
+            </p>
             <p class="stat-heading">${this.attr("heading")}</p>
             <p class="stat-text">${content}</p>
         `;
     }
+
+    afterRender() {
+        onceVisible(this, () => {
+            this.classList.add("is-visible");
+            if (this.#count) this.#countUp();
+        }, 0.5);
+    }
+
+    #countUp() {
+        const output = this.querySelector(".stat-number");
+        const duration = Number(this.getAttribute("duration")) || 1500;
+        const start = performance.now();
+
+        const tick = (now) => {
+            const progress = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3); // ease-out
+            output.textContent = this.#count.format(this.#count.target * eased);
+            if (progress < 1) requestAnimationFrame(tick);
+        };
+
+        requestAnimationFrame(tick);
+    }
 }
+
+/* "16,4M Leute" -> { target: 16.4, format(n) -> "<n>M Leute" } (German decimal comma) */
+const parseCount = (value) => {
+    const match = value.match(/\d+(?:,\d+)?/);
+    if (!match) return null;
+
+    const prefix = value.slice(0, match.index);
+    const suffix = value.slice(match.index + match[0].length);
+    const decimals = match[0].split(",")[1]?.length ?? 0;
+    const target = Number(match[0].replace(",", "."));
+
+    const format = (number) => prefix + number.toLocaleString("de-DE", {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals,
+        useGrouping: false,
+    }) + suffix;
+
+    return { target, format };
+};
 
 /* Accordion entry. Number is generated from the position unless `number` is set.
    All items with the same `group` (default "faq") are exclusive: only one is open. */
@@ -144,8 +214,7 @@ const FAQ_ICON = "imgs/accordionPlus.svg";
 
 class MqFaqItem extends MqElement {
     render(content) {
-        const siblings = [...this.parentElement.children].filter((el) => el.localName === this.localName);
-        const number = this.getAttribute("number") ?? String(siblings.indexOf(this) + 1).padStart(2, "0");
+        const number = this.getAttribute("number") ?? String(siblingIndex(this) + 1).padStart(2, "0");
         const open = this.hasAttribute("open") ? " open" : "";
 
         return `
@@ -161,8 +230,36 @@ class MqFaqItem extends MqElement {
     }
 }
 
-/* Team card: name, image, role */
+/* Team card: name, image, role.
+   Tilts into place when scrolled into view (--i = position, used for the stagger in CSS).
+   On devices with a mouse the image tilts towards the cursor, `tilt` = max angle in deg. */
 class MqTeamMember extends MqElement {
+    afterRender() {
+        this.style.setProperty("--i", siblingIndex(this));
+        onceVisible(this, () => this.classList.add("is-visible"), 0.25);
+
+        const canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+        if (canHover && !prefersReducedMotion()) this.#enableHoverTilt();
+    }
+
+    #enableHoverTilt() {
+        const image = this.querySelector(".team-image");
+        const maxTilt = Number(this.getAttribute("tilt")) || 8;
+
+        image.addEventListener("pointermove", (event) => {
+            const rect = image.getBoundingClientRect();
+            const x = (event.clientX - rect.left) / rect.width - 0.5;
+            const y = (event.clientY - rect.top) / rect.height - 0.5;
+            image.style.setProperty("--tilt-x", `${(-y * maxTilt).toFixed(2)}deg`);
+            image.style.setProperty("--tilt-y", `${(x * maxTilt).toFixed(2)}deg`);
+        });
+
+        image.addEventListener("pointerleave", () => {
+            image.style.removeProperty("--tilt-x");
+            image.style.removeProperty("--tilt-y");
+        });
+    }
+
     render() {
         const name = this.getAttribute("name") ?? "";
 

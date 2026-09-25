@@ -17,6 +17,17 @@ Breakpoints (media queries can't use variables):
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: var(--nav-scroll-padding);
+}
+
+a,
+button,
+summary {
+    -webkit-tap-highlight-color: transparent;
+}
+
 body {
     margin: 0;
     font-family: var(--font-family);
@@ -82,13 +93,31 @@ body > section {
     line-height: var(--line-height-tight);
 }
 
-/* dashed underline, dash size is controlled by --dash-* variables */
+/* dashed underline, dash size is controlled by --dash-* variables.
+   Drawn as ::after, so it can be animated (clip-path, background-position) */
 .dashed-line {
+    position: relative;
     padding-bottom: var(--space-xs);
+}
+
+.dashed-line::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0 0;
+    height: var(--dash-thickness);
     background-image: linear-gradient(to right, currentColor var(--dash-length), transparent 0);
-    background-size: calc(var(--dash-length) + var(--dash-gap)) var(--dash-thickness);
+    background-size: calc(var(--dash-length) + var(--dash-gap)) 100%;
     background-repeat: repeat-x;
-    background-position: left bottom;
+}
+
+/* readable for screen readers only */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
 }
 
 /* ========== Label (mq-label) ========== */
@@ -113,6 +142,13 @@ mq-label {
     align-items: stretch;
     font-size: var(--font-size-text);
     color: var(--text-color-accent);
+    transition: transform var(--transition);
+}
+
+/* tap / click feedback */
+.button:active,
+.link-arrow:active {
+    transform: scale(0.96);
 }
 
 .button-label {
@@ -129,7 +165,7 @@ mq-label {
     background: var(--text-color-accent);
     color: var(--text-color-light);
     font-size: var(--font-size-small);
-    transition: background var(--transition);
+    transition: background var(--transition), padding var(--transition);
 }
 
 .button:hover .button-label,
@@ -138,15 +174,17 @@ mq-label {
     color: var(--text-color-light);
 }
 
+/* arrow nudges to the right, box width stays the same */
 .button:hover .button-icon,
 .button:focus-visible .button-icon {
     background: var(--background-dark);
+    padding-inline: calc(var(--space-s) + 4px) calc(var(--space-s) - 4px);
 }
 
 /* ========== Navigation ========== */
 
 .main-nav {
-    position: absolute;
+    position: fixed;
     inset: 0 0 auto 0;
     z-index: 10;
     display: flex;
@@ -154,6 +192,20 @@ mq-label {
     gap: var(--nav-gap);
     padding: var(--space-2xl) var(--gutter) var(--space-s);
     color: var(--text-color-light);
+    transition:
+        transform var(--transition-slow),
+        background var(--transition-slow),
+        padding var(--transition-slow);
+}
+
+/* states are set by effects.js (data-sticky) */
+.main-nav.is-scrolled {
+    padding-block: var(--space-s);
+    background: var(--background-dark);
+}
+
+.main-nav.is-hidden {
+    transform: translateY(-100%);
 }
 
 .nav-logo img {
@@ -252,6 +304,13 @@ mq-nav-toggle {
     z-index: -1;
     background: var(--hero-image) center / cover no-repeat;
     filter: blur(var(--hero-blur)) brightness(var(--hero-brightness));
+    animation: hero-zoom var(--hero-zoom-duration) ease-in-out infinite alternate;
+}
+
+@keyframes hero-zoom {
+    to {
+        transform: scale(var(--hero-zoom));
+    }
 }
 
 .hero-content {
@@ -390,8 +449,27 @@ mq-marquee:hover .marquee-group {
     transition: color var(--transition);
 }
 
+.link-arrow > span {
+    transition: transform var(--transition);
+}
+
 .link-arrow:hover {
     color: var(--text-color-accent);
+}
+
+/* arrow nudges forward, dashes start to march */
+.link-arrow:hover > span {
+    transform: translateX(4px);
+}
+
+.link-arrow:hover::after {
+    animation: dash-march 600ms linear infinite;
+}
+
+@keyframes dash-march {
+    to {
+        background-position-x: calc(var(--dash-length) + var(--dash-gap));
+    }
 }
 
 /* ========== Gallery ========== */
@@ -461,6 +539,16 @@ mq-stat {
     line-height: var(--line-height-tight);
 }
 
+/* dashed line draws from left to right when the stat becomes visible (components.js) */
+.stat-value::after {
+    clip-path: inset(0 0 0 0);
+    transition: clip-path var(--stat-line-duration) var(--ease-out);
+}
+
+mq-stat:not(.is-visible) .stat-value::after {
+    clip-path: inset(0 100% 0 0);
+}
+
 .stat-heading {
     font-weight: var(--font-weight-semibold);
 }
@@ -521,11 +609,43 @@ mq-faq-item {
     display: none;
 }
 
-.faq-summary:hover,
+/* hover only on devices with a mouse, otherwise the white bar sticks after a tap */
 .faq-summary:focus-visible {
     outline: none;
     background: var(--background-light);
     color: var(--text-color-dark);
+}
+
+@media (hover: hover) {
+    .faq-summary:hover {
+        background: var(--background-light);
+        color: var(--text-color-dark);
+    }
+
+    .faq-summary:hover .faq-icon {
+        filter: none;
+    }
+}
+
+.faq-summary:active {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* smooth open / close (browsers without ::details-content support simply jump) */
+.faq-item {
+    interpolate-size: allow-keywords;
+}
+
+.faq-item::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition:
+        block-size var(--faq-open-duration) var(--ease-out),
+        content-visibility var(--faq-open-duration) allow-discrete;
+}
+
+.faq-item[open]::details-content {
+    block-size: auto;
 }
 
 .faq-number {
@@ -547,7 +667,6 @@ mq-faq-item {
     transition: transform var(--transition), filter var(--transition);
 }
 
-.faq-summary:hover .faq-icon,
 .faq-summary:focus-visible .faq-icon {
     filter: none;
 }
@@ -590,6 +709,27 @@ mq-team-member {
     gap: var(--space-xs);
     width: fit-content;
     max-width: 100%;
+    transition:
+        opacity var(--team-reveal-duration) var(--ease-out),
+        transform var(--team-reveal-duration) var(--ease-out);
+    /* stagger per column: cards in the same row come in one after another */
+    transition-delay: calc(mod(var(--i, 0), var(--team-columns)) * var(--team-reveal-stagger));
+}
+
+/* tilt-in: hidden + rotated until visible (class set in components.js), alternating direction */
+mq-team-member:not(.is-visible) .team-card {
+    opacity: 0;
+    transform: translateY(40px) rotate(calc(var(--team-reveal-angle) * -1));
+}
+
+mq-team-member:nth-child(even):not(.is-visible) .team-card {
+    transform: translateY(40px) rotate(var(--team-reveal-angle));
+}
+
+/* hover tilt towards the cursor, --tilt-x/y are set in components.js */
+.team-image {
+    transform: perspective(800px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+    transition: transform 150ms ease-out;
 }
 
 .team-name {
@@ -601,6 +741,24 @@ mq-team-member {
 .team-role {
     padding-inline: var(--space-m);
     font-size: var(--font-size-lead);
+}
+
+/* ========== Reduced motion ========== */
+
+/* users who turned off animations in their OS: everything is shown immediately */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        transition-delay: 0s !important;
+    }
+
+    html {
+        scroll-behavior: auto;
+    }
 }
 
 /* ========== Responsive ========== */

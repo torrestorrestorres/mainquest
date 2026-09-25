@@ -74,6 +74,8 @@ Font sizes use clamp(min, fluid, max):
     --section-spacing: clamp(64px, 7.8vw, 112px);
 
     --transition: 200ms ease;
+    --transition-slow: 400ms ease;
+    --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
 
     /* ---------- Components ---------- */
 
@@ -85,6 +87,8 @@ Font sizes use clamp(min, fluid, max):
     --nav-gap: clamp(32px, 8.7vw, 125px);
     --nav-link-gap: clamp(24px, 3.3vw, 48px);
     --font-size-nav: 18px;
+    /* space kept free above anchor targets (sticky nav) */
+    --nav-scroll-padding: 100px;
 
     /* hero */
     --hero-min-height: 100svh;
@@ -92,6 +96,9 @@ Font sizes use clamp(min, fluid, max):
     --hero-blur: 6px;
     --hero-brightness: 0.7;
     --hero-text-width: 720px;
+    /* slow ken burns zoom of the background */
+    --hero-zoom: 1.08;
+    --hero-zoom-duration: 20s;
 
     /* partner logos */
     --partner-mark-height: 48px;
@@ -114,15 +121,21 @@ Font sizes use clamp(min, fluid, max):
     /* numbers */
     --stat-min-width: 260px;
     --stats-gap: clamp(24px, 4.4vw, 64px);
+    --stat-line-duration: 1200ms;
 
     /* faq / accordion */
     --faq-number-width: clamp(28px, 3vw, 44px);
     --faq-gap: var(--space-s);
     --faq-icon-size: 22px;
+    --faq-open-duration: 300ms;
 
     /* team */
     --team-columns: 3;
     --team-gap: var(--space-xl);
+    /* tilt-in when scrolled into view */
+    --team-reveal-duration: 700ms;
+    --team-reveal-angle: 6deg;
+    --team-reveal-stagger: 120ms;
 }
 
 .highlighted{
