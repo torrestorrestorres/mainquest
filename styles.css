@@ -64,7 +64,8 @@ strong {
 }
 
 /* hide components until components.js has rendered them */
-:is(mq-label, mq-marquee, mq-carousel, mq-stat, mq-faq-item, mq-team-member, mq-nav-toggle):not(:defined) {
+:is(mq-label, mq-marquee, mq-carousel, mq-stat, mq-faq-item, mq-team-member,
+    mq-nav, mq-nav-toggle, mq-event-card, mq-event-filter):not(:defined) {
     visibility: hidden;
 }
 
@@ -229,6 +230,14 @@ mq-label {
     opacity: 0.7;
 }
 
+/* link of the current page (set by mq-nav) */
+.nav-links a[aria-current="page"] {
+    text-decoration: underline;
+    text-decoration-color: var(--text-color-accent);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 6px;
+}
+
 /* small counter, set via <a data-badge="36"> */
 .nav-links a[data-badge]::after {
     content: attr(data-badge);
@@ -362,6 +371,11 @@ mq-nav-toggle {
     max-width: var(--hero-text-width);
     font-size: var(--font-size-lead);
     font-weight: var(--font-weight-regular);
+}
+
+/* sub pages: smaller hero, image via style="--hero-image: url('…')" */
+.hero--compact {
+    --hero-min-height: var(--hero-compact-min-height);
 }
 
 /* ========== Partners ========== */
@@ -501,6 +515,11 @@ mq-marquee:hover .marquee-group {
     to {
         background-position-x: calc(var(--dash-length) + var(--dash-gap));
     }
+}
+
+.link-arrow--small {
+    gap: var(--space-xs);
+    font-size: var(--font-size-text);
 }
 
 /* ========== Gallery ========== */
@@ -839,6 +858,216 @@ mq-team-member:nth-child(even):not(.is-visible) .team-card {
     font-size: var(--font-size-lead);
 }
 
+/* ========== Sub pages: split section (text + image, dark) ========== */
+
+.split-section {
+    display: flex;
+    background: var(--background-dark);
+    color: var(--text-color-light);
+}
+
+.split-content {
+    flex: 1 1 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: var(--space-m);
+    padding: var(--space-3xl) var(--gutter);
+}
+
+.split-text {
+    max-width: var(--split-text-width);
+    font-size: var(--font-size-lead);
+    font-weight: var(--font-weight-regular);
+}
+
+/* fixed ratio: a portrait photo doesn't make the section huge, a taller text stretches the image */
+.split-image {
+    flex: 1 1 50%;
+    min-width: 0;
+    aspect-ratio: var(--split-image-ratio);
+    object-fit: cover;
+}
+
+/* ========== Sub pages: events (mq-event-card, mq-event-filter) ========== */
+
+#events {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xl);
+    padding-inline: var(--gutter);
+}
+
+.events-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: var(--space-l);
+}
+
+.events-title {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-l);
+}
+
+.filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+}
+
+.filter-chip {
+    padding: var(--space-xs) var(--space-s);
+    border: 1px solid var(--text-color-dark);
+    border-radius: 999px;
+    background: none;
+    color: var(--text-color-dark);
+    font: inherit;
+    font-size: var(--font-size-small);
+    cursor: pointer;
+    transition: background var(--transition), color var(--transition), transform var(--transition);
+}
+
+.filter-chip:active {
+    transform: scale(0.96);
+}
+
+.filter-chip[aria-pressed="true"] {
+    background: var(--background-dark);
+    color: var(--text-color-light);
+}
+
+@media (hover: hover) {
+    .filter-chip:hover {
+        border-color: var(--text-color-accent);
+        color: var(--text-color-accent);
+    }
+
+    .filter-chip[aria-pressed="true"]:hover {
+        color: var(--text-color-light);
+    }
+}
+
+.filter-chip:focus-visible {
+    outline: 2px solid var(--text-color-accent);
+    outline-offset: 2px;
+}
+
+.events-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xl) var(--event-gap);
+}
+
+mq-event-card {
+    flex: 0 1 calc((100% - (var(--event-columns) - 1) * var(--event-gap)) / var(--event-columns));
+    display: flex;
+}
+
+/* display: flex above would override the hidden attribute (filter) */
+mq-event-card[hidden] {
+    display: none;
+}
+
+.event-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    width: 100%;
+    transition:
+        opacity var(--event-reveal-duration) var(--ease-out),
+        transform var(--event-reveal-duration) var(--ease-out);
+    transition-delay: calc(mod(var(--i, 0), var(--event-columns)) * var(--event-reveal-stagger));
+}
+
+/* fade up when scrolled into view (components.js) and when shown again by the filter */
+mq-event-card:not(.is-visible) .event-card {
+    opacity: 0;
+    transform: translateY(32px);
+}
+
+@starting-style {
+    mq-event-card.is-visible .event-card {
+        opacity: 0;
+        transform: translateY(32px);
+    }
+}
+
+.event-media {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: var(--space-xs);
+    border-radius: var(--event-image-radius);
+}
+
+.event-image {
+    width: 100%;
+    aspect-ratio: var(--event-image-ratio);
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+}
+
+@media (hover: hover) {
+    .event-card:hover .event-image {
+        transform: scale(var(--event-image-zoom));
+    }
+}
+
+.event-category {
+    position: absolute;
+    top: var(--space-s);
+    left: var(--space-s);
+    padding: 4px var(--space-s);
+    border-radius: 999px;
+    background: var(--badge-background);
+    color: var(--badge-color);
+    font-size: var(--font-size-xs);
+}
+
+.event-meta {
+    color: var(--text-color-accent);
+    font-size: var(--font-size-small);
+    font-weight: var(--font-weight-semibold);
+}
+
+.event-title {
+    font-size: var(--font-size-large);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+}
+
+.event-text {
+    font-size: var(--font-size-small);
+    font-weight: var(--font-weight-regular);
+}
+
+.event-card .link-arrow {
+    align-self: flex-start;
+    margin-top: var(--space-xs);
+}
+
+/* ========== Sub pages: call to action ========== */
+
+.cta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: var(--space-xl);
+    padding: var(--space-3xl) var(--gutter);
+    background: var(--background-dark);
+    color: var(--text-color-light);
+}
+
+.cta-text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-m);
+}
+
 /* ========== Reduced motion ========== */
 
 /* users who turned off animations in their OS: everything is shown immediately */
@@ -862,7 +1091,23 @@ mq-team-member:nth-child(even):not(.is-visible) .team-card {
 @media (max-width: 900px) {
     :root {
         --team-columns: 2;
+        --event-columns: 2;
         --nav-logo-height: 40px;
+    }
+
+    /* split section: image on top, text below */
+    .split-section {
+        flex-direction: column;
+    }
+
+    .split-image {
+        order: -1;
+        max-height: 50vh;
+        width: 100%;
+    }
+
+    .split-content {
+        padding-block: var(--space-2xl);
     }
 
     /* burger navigation */
@@ -920,6 +1165,7 @@ mq-team-member:nth-child(even):not(.is-visible) .team-card {
 @media (max-width: 600px) {
     :root {
         --team-columns: 1;
+        --event-columns: 1;
         --label-icon-size: 32px;
     }
 

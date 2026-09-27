@@ -156,6 +156,24 @@ Font sizes use clamp(min, fluid, max):
     --team-reveal-duration: 700ms;
     --team-reveal-angle: 6deg;
     --team-reveal-stagger: 120ms;
+
+    /* ---------- Sub pages ---------- */
+
+    /* smaller hero (class .hero--compact) */
+    --hero-compact-min-height: 70svh;
+
+    /* split section: text + image side by side (dark) */
+    --split-text-width: 560px;
+    --split-image-ratio: 4 / 3;
+
+    /* event cards */
+    --event-columns: 3;
+    --event-gap: var(--space-xl);
+    --event-image-ratio: 4 / 3;
+    --event-image-radius: var(--gallery-radius);
+    --event-image-zoom: 1.05;
+    --event-reveal-duration: 600ms;
+    --event-reveal-stagger: 100ms;
 }
 
 .highlighted{

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unsere Events · Main Quest</title>
+    <link rel="stylesheet" href="design.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="components.js" defer></script>
+    <script src="effects.js" defer></script>
+</head>
+<body>
+
+<mq-nav></mq-nav>
+
+<section id="hero" class="hero--compact" style="--hero-image: url('imgs/vibes/party-web.jpg')">
+    <div class="hero-content">
+        <mq-label variant="light">Unsere Events</mq-label>
+        <h1 class="heading-xl">Quests, die wir<br> schon erlebt haben.</h1>
+    </div>
+    <div class="hero-footer">
+        <p class="hero-text">
+            Von exklusiven Creator-Events über Community Experiences bis hin zu
+            außergewöhnlichen Brand Activations: Hier siehst du, was wir schon auf die Beine gestellt haben.
+        </p>
+        <a class="button" href="#next-quest">
+            <span class="button-label">Zur Next Quest</span>
+            <span class="button-icon" aria-hidden="true">→</span>
+        </a>
+    </div>
+</section>
+
+<!-- TODO: echte Daten zur nächsten Quest -->
+<section id="next-quest" class="split-section">
+    <div class="split-content">
+        <mq-label variant="light">Next Quest</mq-label>
+        <p class="event-meta"><time datetime="2026-10-31">31.10.2026</time> · Köln</p>
+        <h2 class="heading-l">Halloween Creator Night</h2>
+        <p class="split-text">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+            exercitation ullamco laboris.
+        </p>
+        <a class="button" href="#">
+            <span class="button-label">Mehr erfahren</span>
+            <span class="button-icon" aria-hidden="true">→</span>
+        </a>
+    </div>
+    <img class="split-image" src="imgs/vibes/ferriswheel-web.jpg" alt="Beleuchtetes Riesenrad bei Nacht" loading="lazy">
+</section>
+
+<!-- TODO: echte Events. Ein Event = ein <mq-event-card>, die Filter-Chips entstehen automatisch aus "category" -->
+<section id="events">
+    <div class="events-head">
+        <div class="events-title">
+            <mq-label>Vergangene Quests</mq-label>
+            <h2 class="heading-l">Das haben wir<br> schon <span class="highlighted">erlebt.</span></h2>
+        </div>
+        <mq-event-filter for="events-grid"></mq-event-filter>
+    </div>
+
+    <div class="events-grid" id="events-grid">
+        <mq-event-card
+            img="imgs/vibes/header-web.jpg" alt="Kostümierte Gäste auf einer Halloween-Party"
+            date="2025-10-31" location="Köln" category="Creator-Event"
+            heading="Halloween Creator Night 2025" link="#">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt.
+        </mq-event-card>
+        <mq-event-card
+            img="imgs/vibes/party-web.jpg" alt="Menschenmenge vor einer beleuchteten Bühne"
+            date="2025-08-16" location="Berlin" category="Brand Activation"
+            heading="Summer Stage" link="#">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam.
+        </mq-event-card>
+        <mq-event-card
+            img="imgs/vibes/dj-web.jpg" alt="DJ-Mischpult in blauem Licht"
+            date="2025-06-07" location="Hamburg" category="Creator-Event"
+            heading="Late Night Session" link="#">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor.
+        </mq-event-card>
+        <mq-event-card
+            img="imgs/vibes/nightclub-web.jpg" alt="Club mit Leinwand „Imagine Every Thing“"
+            date="2025-04-12" location="München" category="Brand Activation"
+            heading="Imagine Everything Premiere" link="#">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Excepteur sint occaecat.
+        </mq-event-card>
+        <mq-event-card
+            img="imgs/vibes/accordionParty.png" alt="Feiernde Menschen auf einem Event"
+            date="2025-02-22" location="Köln" category="Community"
+            heading="Community Rave" link="#">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nisi nulla quis sem.
+        </mq-event-card>
+        <mq-event-card
+            img="imgs/vibes/ferriswheel-web.jpg" alt="Beleuchtetes Riesenrad bei Nacht"
+            date="2024-09-14" location="Düsseldorf" category="Community"
+            heading="Kirmes Quest" link="#">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio praesent.
+        </mq-event-card>
+    </div>
+</section>
+
+<section id="numbers">
+    <mq-label>Unsere Events in Zahlen</mq-label>
+    <div class="stats">
+        <mq-stat value="30+" heading="Events umgesetzt">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt.
+        </mq-stat>
+        <mq-stat value="16,4M Leute" heading="erreicht">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam.
+        </mq-stat>
+    </div>
+</section>
+
+<section id="event-cta" class="cta">
+    <div class="cta-text">
+        <h2 class="heading-l">Deine Quest<br> <span class="highlighted">fehlt</span> noch?</h2>
+        <p class="hero-text">
+            Du planst ein Creator-Event oder eine Brand Activation? Erzähl uns von deiner Idee,
+            wir machen daraus die nächste MainQuest.
+        </p>
+    </div>
+    <!-- TODO: kontakt.html gibt es noch nicht -->
+    <a class="button" href="kontakt.html">
+        <span class="button-label">Event anfragen</span>
+        <span class="button-icon" aria-hidden="true">→</span>
+    </a>
+</section>
+
+<footer></footer>
+</body>
+</html>

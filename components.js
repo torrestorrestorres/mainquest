@@ -13,7 +13,10 @@ Each component renders once from its attributes + inner content.
     <mq-stat value="30+" heading="Title"> text </mq-stat>
     <mq-faq-item heading="Question" open> answer </mq-faq-item>
     <mq-team-member name="Name" role="Role" img="path.png"></mq-team-member>
+    <mq-nav></mq-nav>   (links: NAV_LINKS below)
     <mq-nav-toggle controls="nav-links"></mq-nav-toggle>
+    <mq-event-card img date location category heading link link-label> text </mq-event-card>
+    <mq-event-filter for="grid-id"></mq-event-filter>
 
 */
 
@@ -280,6 +283,124 @@ class MqTeamMember extends MqElement {
     }
 }
 
+/* Main navigation, shared by all pages -> edit the links only here.
+   Links to sections of the current page become plain anchors (index.html#team -> #team),
+   the link of the current page gets aria-current="page". */
+const NAV_LINKS = [
+    { label: "Next Quest", href: "index.html#whatIs" },
+    { label: "Für Creator", href: "#" },
+    { label: "Unsere Events", href: "events.html", badge: "!" },
+    { label: "Für Brands", href: "#" },
+    { label: "Über Uns", href: "index.html#team" },
+];
+
+class MqNav extends MqElement {
+    render() {
+        const currentPage = location.pathname.split("/").pop() || "index.html";
+        const resolve = (href) => href.startsWith(`${currentPage}#`) ? href.slice(currentPage.length) : href;
+
+        const links = NAV_LINKS.map(({ label, href, badge }) => {
+            const current = href === currentPage ? ' aria-current="page"' : "";
+            const badgeAttr = badge ? ` data-badge="${escapeHtml(badge)}"` : "";
+            return `<li><a href="${escapeHtml(resolve(href))}"${current}${badgeAttr}>${escapeHtml(label)}</a></li>`;
+        }).join("");
+
+        return `
+            <nav class="main-nav" data-sticky aria-label="Hauptnavigation">
+                <a class="nav-logo" href="${currentPage === "index.html" ? "#hero" : "index.html"}">
+                    <img src="imgs/wortlogo.png" alt="MainQuest" width="166" height="52">
+                </a>
+                <mq-nav-toggle controls="nav-links"></mq-nav-toggle>
+                <ul class="nav-links" id="nav-links">${links}</ul>
+            </nav>
+        `;
+    }
+}
+
+/* Event card: image, category, date + location, heading, short text, link.
+   date as ISO (2025-10-31) -> shown as 31.10.2025. External links open in a new tab.
+   Fades in when scrolled into view (--i = position, used for the stagger in CSS). */
+class MqEventCard extends MqElement {
+    render(content) {
+        const heading = this.getAttribute("heading") ?? "";
+        const date = this.getAttribute("date");
+        const category = this.getAttribute("category");
+        const link = this.getAttribute("link");
+        const external = /^https?:\/\//.test(link ?? "");
+
+        const meta = [
+            date && `<time datetime="${escapeHtml(date)}">${formatDate(date)}</time>`,
+            this.getAttribute("location") && this.attr("location"),
+        ].filter(Boolean).join(" · ");
+
+        return `
+            <article class="event-card">
+                <div class="event-media">
+                    <img class="event-image" src="${this.attr("img")}" alt="${this.attr("alt")}" loading="lazy">
+                    ${category ? `<span class="event-category">${escapeHtml(category)}</span>` : ""}
+                </div>
+                ${meta ? `<p class="event-meta">${meta}</p>` : ""}
+                <h3 class="event-title">${escapeHtml(heading)}</h3>
+                ${content ? `<p class="event-text">${content}</p>` : ""}
+                ${link ? `
+                    <a class="link-arrow link-arrow--small dashed-line" href="${escapeHtml(link)}"
+                       ${external ? 'target="_blank" rel="noopener"' : ""}>
+                        <span aria-hidden="true">→</span> ${this.attr("link-label", "Zum Recap")}
+                        <span class="visually-hidden">: ${escapeHtml(heading)}</span>
+                    </a>` : ""}
+            </article>
+        `;
+    }
+
+    afterRender() {
+        this.style.setProperty("--i", siblingIndex(this));
+        onceVisible(this, () => this.classList.add("is-visible"), 0.2);
+    }
+}
+
+const formatDate = (iso) => new Date(iso).toLocaleDateString("de-DE", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    timeZone: "UTC",
+});
+
+/* Filter chips for event cards. The chips are generated from the `category`
+   attributes of the cards inside the element with id `for`. */
+class MqEventFilter extends MqElement {
+    #grid = null;
+
+    render() {
+        this.#grid = document.getElementById(this.getAttribute("for"));
+        const cards = [...this.#grid.querySelectorAll("mq-event-card[category]")];
+        const categories = [...new Set(cards.map((card) => card.getAttribute("category")))];
+
+        const chip = (label, value, pressed) =>
+            `<button class="filter-chip" type="button" data-value="${escapeHtml(value)}" aria-pressed="${pressed}">${escapeHtml(label)}</button>`;
+
+        return `
+            <div class="filter-chips" role="group" aria-label="${this.attr("label", "Events filtern")}">
+                ${chip(this.getAttribute("all-label") ?? "Alle", "", true)}
+                ${categories.map((category) => chip(category, category, false)).join("")}
+            </div>
+        `;
+    }
+
+    afterRender() {
+        this.addEventListener("click", (event) => {
+            const selected = event.target.closest(".filter-chip");
+            if (!selected) return;
+
+            const value = selected.dataset.value;
+            this.querySelectorAll(".filter-chip").forEach((chip) =>
+                chip.setAttribute("aria-pressed", String(chip === selected)));
+            this.#grid.querySelectorAll("mq-event-card").forEach((card) => {
+                card.hidden = value !== "" && card.getAttribute("category") !== value;
+            });
+        });
+    }
+}
+
 /* Burger button: toggles .is-open on the surrounding <nav> */
 class MqNavToggle extends MqElement {
     render() {
@@ -316,3 +437,6 @@ customElements.define("mq-stat", MqStat);
 customElements.define("mq-faq-item", MqFaqItem);
 customElements.define("mq-team-member", MqTeamMember);
 customElements.define("mq-nav-toggle", MqNavToggle);
+customElements.define("mq-nav", MqNav);
+customElements.define("mq-event-card", MqEventCard);
+customElements.define("mq-event-filter", MqEventFilter);
