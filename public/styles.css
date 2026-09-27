@@ -892,7 +892,7 @@ mq-team-member:nth-child(even):not(.is-visible) .team-card {
 
 /* ========== Sub pages: events (mq-event-card, mq-event-filter) ========== */
 
-#events {
+.events-section {
     display: flex;
     flex-direction: column;
     gap: var(--space-2xl);
@@ -1047,6 +1047,29 @@ mq-event-card:not(.is-visible) .event-card {
 .event-card .link-arrow {
     align-self: flex-start;
     margin-top: var(--space-xs);
+}
+
+/* ========== Sub pages: event detail ========== */
+
+.event-details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+    padding-inline: var(--gutter);
+}
+
+.event-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-m);
+    max-width: var(--event-body-width);
+    font-size: var(--font-size-lead);
+    font-weight: var(--font-weight-regular);
+}
+
+/* gallery sizes are relative to this section (cqi), like on the landing page */
+.event-gallery {
+    container-type: inline-size;
 }
 
 /* ========== Sub pages: call to action ========== */

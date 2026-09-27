@@ -1,17 +1,11 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main Quest</title>
-    <link rel="stylesheet" href="design.css">
-    <link rel="stylesheet" href="styles.css">
-    <script src="components.js" defer></script>
-    <script src="effects.js" defer></script>
-</head>
-<body>
+<?php
+/* Landing page */
+require __DIR__ . '/../app/bootstrap.php';
 
-<mq-nav></mq-nav>
+$next = event_next();
+
+view('partials/head', ['title' => '']);
+?>
 
 <section id="hero">
     <div class="hero-content">
@@ -32,7 +26,7 @@
 
 <section id="partners">
     <div class="logo-and-text">
-        <img src="imgs/bildlogo.png" alt="" width="152" height="48">
+        <img src="/imgs/bildlogo.png" alt="" width="152" height="48">
         <p>
             Wir konnten durch<br> unsere Projekte schon<br>
             <strong class="highlighted">16,4M</strong> Leute erreichen
@@ -40,10 +34,10 @@
     </div>
     <div class="scrolling-partner-img-display">
         <mq-marquee duration="30s">
-            <img src="imgs/partners/holy.png" alt="HOLY" width="165" height="45">
-            <img src="imgs/partners/xperion.png" alt="xperion" width="231" height="85">
-            <img src="imgs/partners/logi.png" alt="Logitech G" width="182" height="102">
-            <img src="imgs/partners/SK-Gaming-cropped.png" alt="SK Gaming" width="220" height="45">
+            <img src="/imgs/partners/holy.png" alt="HOLY" width="165" height="45">
+            <img src="/imgs/partners/xperion.png" alt="xperion" width="231" height="85">
+            <img src="/imgs/partners/logi.png" alt="Logitech G" width="182" height="102">
+            <img src="/imgs/partners/SK-Gaming-cropped.png" alt="SK Gaming" width="220" height="45">
         </mq-marquee>
     </div>
 </section>
@@ -58,16 +52,16 @@
                 Mach dich bereit für<br>
                 die nächste <span class="highlighted">MainQuest.</span>
             </h2>
-            <a class="link-arrow dashed-line" href="#">
+            <a class="link-arrow dashed-line" href="<?= e($next ? event_url($next) : '/events') ?>">
                 <span aria-hidden="true">→</span> Zur Next Quest
             </a>
         </div>
     </div>
     <mq-carousel class="gallery" start="center" role="region" aria-label="Eindrücke von unseren Events">
-        <img src="imgs/vibes/dj-web.jpg" alt="DJ-Mischpult in blauem Licht" loading="lazy">
-        <img src="imgs/vibes/party-web.jpg" alt="Menschenmenge vor einer beleuchteten Bühne" loading="lazy">
-        <img src="imgs/vibes/ferriswheel-web.jpg" alt="Beleuchtetes Riesenrad bei Nacht" loading="lazy">
-        <img src="imgs/vibes/nightclub-web.jpg" alt="Club mit Leinwand „Imagine Every Thing“" loading="lazy">
+        <img src="/imgs/vibes/dj-web.jpg" alt="DJ-Mischpult in blauem Licht" loading="lazy">
+        <img src="/imgs/vibes/party-web.jpg" alt="Menschenmenge vor einer beleuchteten Bühne" loading="lazy">
+        <img src="/imgs/vibes/ferriswheel-web.jpg" alt="Beleuchtetes Riesenrad bei Nacht" loading="lazy">
+        <img src="/imgs/vibes/nightclub-web.jpg" alt="Club mit Leinwand „Imagine Every Thing“" loading="lazy">
     </mq-carousel>
 </section>
 
@@ -113,20 +107,18 @@
             </mq-faq-item>
         </div>
     </div>
-    <img class="faq-image" src="imgs/vibes/accordionParty.png" alt="Feiernde Menschen auf einem Event" width="720" height="865" loading="lazy">
+    <img class="faq-image" src="/imgs/vibes/accordionParty.png" alt="Feiernde Menschen auf einem Event" width="720" height="865" loading="lazy">
 </section>
 
 <section id="team">
     <h2 class="heading-xl highlighted">Grüzi vom Team</h2>
     <div class="team-grid">
-        <mq-team-member name="Finja" role="Chief Executive Officer" img="imgs/team/finja.png"></mq-team-member>
-        <mq-team-member name="Marius" role="Chief Operating Officer" img="imgs/team/marius.png"></mq-team-member>
-        <mq-team-member name="Merlin" role="Chief Finance Officer" img="imgs/team/merlin.png"></mq-team-member>
-        <mq-team-member name="Julian" role="Concept &amp; Creative Support" img="imgs/team/julian.png"></mq-team-member>
-        <mq-team-member name="Björn" role="Creative Designer" img="imgs/team/bjoern.png"></mq-team-member>
+        <mq-team-member name="Finja" role="Chief Executive Officer" img="/imgs/team/finja.png"></mq-team-member>
+        <mq-team-member name="Marius" role="Chief Operating Officer" img="/imgs/team/marius.png"></mq-team-member>
+        <mq-team-member name="Merlin" role="Chief Finance Officer" img="/imgs/team/merlin.png"></mq-team-member>
+        <mq-team-member name="Julian" role="Concept &amp; Creative Support" img="/imgs/team/julian.png"></mq-team-member>
+        <mq-team-member name="Björn" role="Creative Designer" img="/imgs/team/bjoern.png"></mq-team-member>
     </div>
 </section>
 
-<footer></footer>
-</body>
-</html>
+<?php view('partials/foot'); ?>

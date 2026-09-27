@@ -65,8 +65,8 @@ class MqElement extends HTMLElement {
 
 /* Exclamation icon + text. variant="light" = white icon for dark backgrounds */
 const LABEL_ICONS = {
-    dark: "imgs/exclamationBrown.png",
-    light: "imgs/exclamationWhite.png",
+    dark: "/imgs/exclamationBrown.png",
+    light: "/imgs/exclamationWhite.png",
 };
 
 class MqLabel extends MqElement {
@@ -214,7 +214,7 @@ const parseCount = (value) => {
 /* Accordion entry. Number is generated from the position unless `number` is set.
    All items with the same `group` (default "faq") are exclusive: only one is open.
    The answer repeats number + heading, only shown in the desktop panel (styles.css). */
-const FAQ_ICON = "imgs/accordionPlus.svg";
+const FAQ_ICON = "/imgs/accordionPlus.svg";
 
 class MqFaqItem extends MqElement {
     render(content) {
@@ -284,31 +284,34 @@ class MqTeamMember extends MqElement {
 }
 
 /* Main navigation, shared by all pages -> edit the links only here.
-   Links to sections of the current page become plain anchors (index.html#team -> #team),
-   the link of the current page gets aria-current="page". */
+   On the landing page, links to its sections become plain anchors (/#team -> #team).
+   The link of the current page (or its sub pages, /events/…) gets aria-current="page". */
 const NAV_LINKS = [
-    { label: "Next Quest", href: "index.html#whatIs" },
+    { label: "Next Quest", href: "/#whatIs" },
     { label: "Für Creator", href: "#" },
-    { label: "Unsere Events", href: "events.html", badge: "!" },
+    { label: "Unsere Events", href: "/events", badge: "!" },
     { label: "Für Brands", href: "#" },
-    { label: "Über Uns", href: "index.html#team" },
+    { label: "Über Uns", href: "/#team" },
 ];
 
 class MqNav extends MqElement {
     render() {
-        const currentPage = location.pathname.split("/").pop() || "index.html";
-        const resolve = (href) => href.startsWith(`${currentPage}#`) ? href.slice(currentPage.length) : href;
+        const path = location.pathname.replace(/\/index\.php$/, "/");
+        const isHome = path === "/";
+        const resolve = (href) => isHome && href.startsWith("/#") ? href.slice(1) : href;
+        const isCurrent = (href) => href.startsWith("/") && !href.includes("#")
+            && (path === href || path.startsWith(`${href}/`));
 
         const links = NAV_LINKS.map(({ label, href, badge }) => {
-            const current = href === currentPage ? ' aria-current="page"' : "";
+            const current = isCurrent(href) ? ' aria-current="page"' : "";
             const badgeAttr = badge ? ` data-badge="${escapeHtml(badge)}"` : "";
             return `<li><a href="${escapeHtml(resolve(href))}"${current}${badgeAttr}>${escapeHtml(label)}</a></li>`;
         }).join("");
 
         return `
             <nav class="main-nav" data-sticky aria-label="Hauptnavigation">
-                <a class="nav-logo" href="${currentPage === "index.html" ? "#hero" : "index.html"}">
-                    <img src="imgs/wortlogo.png" alt="MainQuest" width="166" height="52">
+                <a class="nav-logo" href="${isHome ? "#hero" : "/"}">
+                    <img src="/imgs/wortlogo.png" alt="MainQuest" width="166" height="52">
                 </a>
                 <mq-nav-toggle controls="nav-links"></mq-nav-toggle>
                 <ul class="nav-links" id="nav-links">${links}</ul>

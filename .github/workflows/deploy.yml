@@ -1,0 +1,50 @@
+# Uploads the site to the host on every push:
+#   develop -> test site   (secret FTP_DIR_TEST)
+#   main    -> live site   (secret FTP_DIR_LIVE)
+#
+# Setup (once, in GitHub: Settings -> Secrets and variables -> Actions):
+#   Secrets:   FTP_SERVER, FTP_USERNAME, FTP_PASSWORD, FTP_DIR_TEST, FTP_DIR_LIVE
+#              (directories end with a slash, e.g. /test/ - the domain points to <dir>/public)
+#   Variable:  DEPLOY_ENABLED = true   (until then this workflow is skipped)
+#
+# Only changed files are uploaded. Database, uploads and config.php on the
+# server are never touched.
+
+name: Deploy
+
+on:
+  push:
+    branches: [develop, main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: vars.DEPLOY_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Upload via FTPS
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          server-dir: ${{ github.ref_name == 'main' && secrets.FTP_DIR_LIVE || secrets.FTP_DIR_TEST }}
+          # database, uploads and config.php are not in git, so they are never uploaded
+          # (public/uploads/.htaccess is, it blocks scripts in the upload folder)
+          exclude: |
+            **/.git*
+            **/.git*/**
+            .github/**
+            data/**
+            app/config.php
+            static/**
+            router.php
+            README.md
+            public/imgs/vibes/header.jpg

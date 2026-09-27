@@ -174,6 +174,9 @@ Font sizes use clamp(min, fluid, max):
     --event-image-zoom: 1.05;
     --event-reveal-duration: 600ms;
     --event-reveal-stagger: 100ms;
+
+    /* event detail page */
+    --event-body-width: 760px;
 }
 
 .highlighted{

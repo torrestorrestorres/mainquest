@@ -1,0 +1,28 @@
+# Apache config for the host (locally router.php does the same)
+
+Options -Indexes -MultiViews
+DirectoryIndex index.php
+ErrorDocument 404 /404.php
+
+RewriteEngine On
+RewriteBase /
+
+# hidden files are never served (except .well-known, needed for SSL certificates)
+RewriteRule (^|/)\.(?!well-known/) - [F]
+
+# clean URLs: /events and /events/<slug>
+RewriteRule ^events/?$ events.php [L,QSA]
+RewriteRule ^events/([a-z0-9-]+)/?$ event.php?slug=$1 [L,QSA]
+
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# images + fonts: browser cache for one week (css/js get ?v=… from asset())
+<IfModule mod_headers.c>
+    <FilesMatch "\.(jpe?g|png|webp|avif|svg|ttf|woff2?)$">
+        Header set Cache-Control "public, max-age=604800"
+    </FilesMatch>
+</IfModule>

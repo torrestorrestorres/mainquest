@@ -1,0 +1,11 @@
+# local settings + secrets (every environment has its own)
+/app/config.php
+
+# database + uploaded files live only on the server / your machine
+/data/
+/public/uploads/*
+!/public/uploads/.htaccess
+
+# OS files
+.DS_Store
+Thumbs.db
