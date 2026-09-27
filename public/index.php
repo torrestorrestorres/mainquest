@@ -112,12 +112,23 @@ view('partials/head', ['title' => '']);
 
 <section id="team">
     <h2 class="heading-xl highlighted">Grüzi vom Team</h2>
+    <!-- TODO: real texts for the back of the cards -->
     <div class="team-grid">
-        <mq-team-member name="Finja" role="Chief Executive Officer" img="/imgs/team/finja.png"></mq-team-member>
-        <mq-team-member name="Marius" role="Chief Operating Officer" img="/imgs/team/marius.png"></mq-team-member>
-        <mq-team-member name="Merlin" role="Chief Finance Officer" img="/imgs/team/merlin.png"></mq-team-member>
-        <mq-team-member name="Julian" role="Concept &amp; Creative Support" img="/imgs/team/julian.png"></mq-team-member>
-        <mq-team-member name="Björn" role="Creative Designer" img="/imgs/team/bjoern.png"></mq-team-member>
+        <mq-team-member name="Finja" role="Chief Executive Officer" img="/imgs/team/finja.png">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt.
+        </mq-team-member>
+        <mq-team-member name="Marius" role="Chief Operating Officer" img="/imgs/team/marius.png">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam.
+        </mq-team-member>
+        <mq-team-member name="Merlin" role="Chief Finance Officer" img="/imgs/team/merlin.png">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor.
+        </mq-team-member>
+        <mq-team-member name="Julian" role="Concept &amp; Creative Support" img="/imgs/team/julian.png">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Excepteur sint occaecat.
+        </mq-team-member>
+        <mq-team-member name="Björn" role="Creative Designer" img="/imgs/team/bjoern.png">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio praesent.
+        </mq-team-member>
     </div>
 </section>
 

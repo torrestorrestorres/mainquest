@@ -157,6 +157,15 @@ Font sizes use clamp(min, fluid, max):
     --team-reveal-duration: 700ms;
     --team-reveal-angle: 6deg;
     --team-reveal-stagger: 120ms;
+    /* hover glow + flip card */
+    --team-glow-color: color-mix(in srgb, var(--text-color-accent) 85%, transparent);
+    --team-glow-size: 24px;
+    --team-flip-duration: 700ms;
+    --team-peek-angle: 28deg;
+    --team-back-background: var(--background-dark);
+    --team-back-padding: 18%;
+    --team-hint-size: 40px;
+    --team-hint-offset: 10%;
 
     /* ---------- Sub pages ---------- */
 

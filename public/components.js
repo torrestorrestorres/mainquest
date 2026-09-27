@@ -12,7 +12,7 @@ Each component renders once from its attributes + inner content.
     <mq-carousel start="center"> images </mq-carousel>
     <mq-stat value="30+" heading="Title"> text </mq-stat>
     <mq-faq-item heading="Question" open> answer </mq-faq-item>
-    <mq-team-member name="Name" role="Role" img="path.png"></mq-team-member>
+    <mq-team-member name="Name" role="Role" img="path.png"> text on the back (optional) </mq-team-member>
     <mq-nav></mq-nav>   (links: NAV_LINKS below)
     <mq-nav-toggle controls="nav-links"></mq-nav-toggle>
     <mq-event-card img date location category heading link link-label> text </mq-event-card>
@@ -241,45 +241,82 @@ class MqFaqItem extends MqElement {
 }
 
 /* Team card: name, image, role.
+   With inner content the image becomes a button: click / tap flips it, the back shows the content
+   (same silhouette as the photo). A small icon + a one-time "peek" show that it can be flipped.
    Tilts into place when scrolled into view (--i = position, used for the stagger in CSS).
    On devices with a mouse the image tilts towards the cursor, `tilt` = max angle in deg. */
+const FLIP_ICON = `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+    stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>`;
+
 class MqTeamMember extends MqElement {
+    render(content) {
+        const name = this.getAttribute("name") ?? "";
+        const img = this.getAttribute("img") ?? "";
+
+        const faces = `
+            <span class="team-tilt">
+                <span class="team-flip-inner">
+                    <img class="team-image team-face" src="${escapeHtml(img)}" alt="${this.attr("alt", `Portrait von ${name}`)}" loading="lazy">
+                    ${content ? `
+                    <span class="team-face team-face--back" aria-hidden="true">
+                        <span class="team-back-shape"><span class="team-back-text">${content}</span></span>
+                    </span>` : ""}
+                </span>
+            </span>
+        `;
+
+        // the back side uses the photo as mask -> same shape (only harmless paths inside url())
+        const mask = /^[\w\/.\-]+$/.test(img) ? ` style="--team-mask: url('${img}')"` : "";
+
+        const media = content
+            ? `<button class="team-flip" type="button" aria-pressed="false" aria-label="${escapeHtml(name)}: Bild umdrehen"${mask}>
+                    ${faces}
+                    <span class="team-flip-hint" aria-hidden="true">${FLIP_ICON}</span>
+               </button>
+               <p class="visually-hidden">${content}</p>`
+            : `<div class="team-flip">${faces}</div>`;
+
+        return `
+            <div class="team-card">
+                <h3 class="team-name">${escapeHtml(name)}</h3>
+                ${media}
+                <p class="team-role">${this.attr("role")}</p>
+            </div>
+        `;
+    }
+
     afterRender() {
         this.style.setProperty("--i", siblingIndex(this));
         onceVisible(this, () => this.classList.add("is-visible"), 0.25);
+
+        const button = this.querySelector("button.team-flip");
+        button?.addEventListener("click", () => {
+            const flipped = this.classList.toggle("is-flipped");
+            button.setAttribute("aria-pressed", String(flipped));
+            this.classList.add("has-interacted"); // no more "peek" animation after the first click
+        });
 
         const canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
         if (canHover && !prefersReducedMotion()) this.#enableHoverTilt();
     }
 
     #enableHoverTilt() {
-        const image = this.querySelector(".team-image");
+        const area = this.querySelector(".team-flip");
+        const tilt = this.querySelector(".team-tilt");
         const maxTilt = Number(this.getAttribute("tilt")) || 8;
 
-        image.addEventListener("pointermove", (event) => {
-            const rect = image.getBoundingClientRect();
+        area.addEventListener("pointermove", (event) => {
+            const rect = area.getBoundingClientRect();
             const x = (event.clientX - rect.left) / rect.width - 0.5;
             const y = (event.clientY - rect.top) / rect.height - 0.5;
-            image.style.setProperty("--tilt-x", `${(-y * maxTilt).toFixed(2)}deg`);
-            image.style.setProperty("--tilt-y", `${(x * maxTilt).toFixed(2)}deg`);
+            tilt.style.setProperty("--tilt-x", `${(-y * maxTilt).toFixed(2)}deg`);
+            tilt.style.setProperty("--tilt-y", `${(x * maxTilt).toFixed(2)}deg`);
         });
 
-        image.addEventListener("pointerleave", () => {
-            image.style.removeProperty("--tilt-x");
-            image.style.removeProperty("--tilt-y");
+        area.addEventListener("pointerleave", () => {
+            tilt.style.removeProperty("--tilt-x");
+            tilt.style.removeProperty("--tilt-y");
         });
-    }
-
-    render() {
-        const name = this.getAttribute("name") ?? "";
-
-        return `
-            <div class="team-card">
-                <h3 class="team-name">${escapeHtml(name)}</h3>
-                <img class="team-image" src="${this.attr("img")}" alt="${this.attr("alt", `Portrait von ${name}`)}" loading="lazy">
-                <p class="team-role">${this.attr("role")}</p>
-            </div>
-        `;
     }
 }
 
