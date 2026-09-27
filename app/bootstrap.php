@@ -28,6 +28,10 @@ if (config('debug')) {
 require APP_PATH . '/helpers.php';
 require APP_PATH . '/database.php';
 require APP_PATH . '/events.php';
+require APP_PATH . '/users.php';
+require APP_PATH . '/auth.php';
+require APP_PATH . '/mail.php';
+require APP_PATH . '/images.php';
 
 function config(string $key): mixed
 {

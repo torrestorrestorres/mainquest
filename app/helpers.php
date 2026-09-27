@@ -38,6 +38,12 @@ function view(string $name, array $data = []): void
     require APP_PATH . "/views/{$name}.php";
 }
 
+function redirect(string $url): never
+{
+    header('Location: ' . $url, true, 303);
+    exit;
+}
+
 function not_found(): never
 {
     http_response_code(404);
@@ -59,6 +65,12 @@ function paragraphs(?string $text): string
         fn($block) => '<p>' . nl2br(e(trim($block))) . '</p>',
         array_filter($blocks, fn($block) => trim($block) !== '')
     ));
+}
+
+/* Only complete http(s) links (no javascript:, no relative paths) */
+function is_http_url(string $url): bool
+{
+    return (bool) preg_match('#^https?://#i', $url) && filter_var($url, FILTER_VALIDATE_URL) !== false;
 }
 
 /* "Halloween Creator Night 2025" -> "halloween-creator-night-2025" */

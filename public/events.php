@@ -1,8 +1,9 @@
 <?php
-/* /events: next quest + all past events from the database */
+/* /events: next quest, further upcoming events, all past events */
 require __DIR__ . '/../app/bootstrap.php';
 
-$next = event_next();
+$upcomingEvents = events_upcoming();
+$next = array_shift($upcomingEvents);
 $pastEvents = events_past();
 
 view('partials/head', [
@@ -32,6 +33,22 @@ view('partials/head', [
 </section>
 
 <?php view('partials/next-quest', ['event' => $next]); ?>
+
+<?php if ($upcomingEvents): ?>
+<section id="upcoming" class="events-section">
+    <div class="events-head">
+        <div class="events-title">
+            <mq-label>Demnächst</mq-label>
+            <h2 class="heading-l">Diese Quests<br> stehen <span class="highlighted">an.</span></h2>
+        </div>
+    </div>
+    <div class="events-grid">
+<?php foreach ($upcomingEvents as $event): ?>
+        <?php view('partials/event-card', ['event' => $event]); ?>
+<?php endforeach; ?>
+    </div>
+</section>
+<?php endif; ?>
 
 <?php if ($pastEvents): ?>
 <section id="events" class="events-section">

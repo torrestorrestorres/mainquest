@@ -22,4 +22,19 @@ return [
     'uploads_url' => '/uploads',
 
     'timezone' => 'Europe/Berlin',
+
+    // one-time secret for creating the first admin: /admin/setup.php?token=…
+    // (only works while there is no user yet). Use a long random string.
+    'setup_token' => '',
+
+    // logout after this many hours without activity
+    'session_idle_hours' => 8,
+
+    // e-mails (invites, password reset). Disabled = written to data/mail.log
+    'mail' => [
+        'enabled' => false,
+        'from' => 'noreply@example.com',   // must be an address of your own domain
+        'from_name' => 'MainQuest',
+        'reply_to' => 'info@example.com',
+    ],
 ];

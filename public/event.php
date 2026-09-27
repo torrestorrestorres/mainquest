@@ -2,7 +2,8 @@
 /* /events/<slug>: detail page. Upcoming -> info + tickets, past -> recap + aftermovie */
 require __DIR__ . '/../app/bootstrap.php';
 
-$event = event_by_slug((string) ($_GET['slug'] ?? '')) ?? not_found();
+// logged-in users (admin) also see drafts, as a preview
+$event = event_by_slug((string) ($_GET['slug'] ?? ''), current_user() !== null) ?? not_found();
 $upcoming = event_is_upcoming($event);
 $images = event_images((int) $event['id']);
 $moreEvents = events_past(3, (int) $event['id']);
@@ -19,7 +20,7 @@ view('partials/head', [
 
 <section id="hero" class="hero--compact"<?= $cover ? " style=\"--hero-image: url('{$cover}')\"" : '' ?>>
     <div class="hero-content">
-        <mq-label variant="light"><?= $upcoming ? 'Next Quest' : 'Recap' ?></mq-label>
+        <mq-label variant="light"><?= $event['is_published'] ? ($upcoming ? 'Next Quest' : 'Recap') : 'Entwurf · nur für eingeloggte Benutzer sichtbar' ?></mq-label>
         <h1 class="heading-xl"><?= e($event['title']) ?></h1>
     </div>
     <div class="hero-footer">
