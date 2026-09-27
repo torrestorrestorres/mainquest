@@ -242,7 +242,7 @@ class MqFaqItem extends MqElement {
 
 /* Team card: name, image, role.
    With inner content the image becomes a button: click / tap flips it, the back shows the content
-   (same silhouette as the photo). A small icon + a one-time "peek" show that it can be flipped.
+   (same silhouette as the photo). A small icon that wiggles once shows that it can be flipped.
    Tilts into place when scrolled into view (--i = position, used for the stagger in CSS).
    On devices with a mouse the image tilts towards the cursor, `tilt` = max angle in deg. */
 const FLIP_ICON = `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
@@ -293,7 +293,7 @@ class MqTeamMember extends MqElement {
         button?.addEventListener("click", () => {
             const flipped = this.classList.toggle("is-flipped");
             button.setAttribute("aria-pressed", String(flipped));
-            this.classList.add("has-interacted"); // no more "peek" animation after the first click
+            this.classList.add("has-interacted"); // no more wiggle hint after the first click
         });
 
         const canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
