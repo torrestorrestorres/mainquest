@@ -7,8 +7,7 @@
             wir machen daraus die nächste MainQuest.
         </p>
     </div>
-    <!-- TODO: contact page doesn't exist yet -->
-    <a class="button" href="/kontakt">
+    <a class="button" href="/kontakt?anliegen=event">
         <span class="button-label">Event anfragen</span>
         <span class="button-icon" aria-hidden="true">→</span>
     </a>

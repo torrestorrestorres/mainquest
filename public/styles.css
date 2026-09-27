@@ -175,6 +175,12 @@ mq-label {
     color: var(--text-color-light);
 }
 
+/* dark variant for light backgrounds */
+.button--dark .button-label {
+    background: var(--background-dark);
+    color: var(--text-color-light);
+}
+
 /* arrow nudges to the right, box width stays the same */
 .button:hover .button-icon,
 .button:focus-visible .button-icon {
@@ -1089,6 +1095,213 @@ mq-event-card:not(.is-visible) .event-card {
     display: flex;
     flex-direction: column;
     gap: var(--space-m);
+}
+
+/* ========== Sub pages: contact ========== */
+
+.contact-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3xl);
+    padding-inline: var(--gutter);
+}
+
+.contact-main {
+    flex: 2 1 480px;
+    min-width: 0;
+}
+
+.contact-info {
+    flex: 1 1 260px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+}
+
+.contact-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-m);
+}
+
+.contact-email {
+    font-size: var(--font-size-lead);
+    font-weight: var(--font-weight-semibold);
+    overflow-wrap: break-word;
+    transition: color var(--transition);
+}
+
+.contact-email:hover {
+    color: var(--text-color-accent);
+}
+
+.social-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-s);
+}
+
+.contact-success {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-m);
+    padding: var(--space-2xl) var(--gutter);
+    background: var(--background-dark);
+    color: var(--text-color-light);
+}
+
+/* ========== Forms (public pages) ========== */
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-l);
+}
+
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-l);
+}
+
+.form-row > .form-field {
+    flex: 1 1 240px;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    font-size: var(--font-size-small);
+    font-weight: var(--font-weight-semibold);
+}
+
+.form-field small {
+    font-weight: var(--font-weight-regular);
+    opacity: 0.7;
+}
+
+.form-field input,
+.form-field textarea {
+    width: 100%;
+    padding: var(--space-xs) 0;
+    border: 0;
+    border-bottom: 2px solid var(--text-color-dark);
+    border-radius: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: var(--font-size-lead);
+    font-weight: var(--font-weight-regular);
+    transition: border-color var(--transition);
+}
+
+.form-field textarea {
+    min-height: 160px;
+    resize: vertical;
+}
+
+.form-field input:focus,
+.form-field textarea:focus {
+    outline: none;
+    border-color: var(--text-color-accent);
+}
+
+.form-field [aria-invalid="true"] {
+    border-color: var(--color-error);
+}
+
+.form-error {
+    color: var(--color-error);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+}
+
+/* topic choice: radio buttons that look like the filter chips */
+.topic-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.topic-chips legend {
+    margin-bottom: var(--space-s);
+    padding: 0;
+    font-size: var(--font-size-small);
+    font-weight: var(--font-weight-semibold);
+}
+
+.topic-chips .form-error {
+    flex-basis: 100%;
+}
+
+.chip-radio {
+    position: relative;
+}
+
+.chip-radio input {
+    position: absolute;
+    opacity: 0;
+}
+
+.chip-radio .filter-chip {
+    display: inline-block;
+}
+
+.chip-radio input:checked + .filter-chip {
+    background: var(--background-dark);
+    color: var(--text-color-light);
+}
+
+.chip-radio input:focus-visible + .filter-chip {
+    outline: 2px solid var(--text-color-accent);
+    outline-offset: 2px;
+}
+
+.form-check {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-s);
+    font-size: var(--font-size-small);
+    font-weight: var(--font-weight-regular);
+    cursor: pointer;
+}
+
+.form-check input {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    margin: 2px 0 0;
+    accent-color: var(--text-color-accent);
+}
+
+.form-check a {
+    text-decoration: underline;
+}
+
+/* spam trap: off screen, humans never see it */
+.hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+/* .button also works as <button> */
+button.button {
+    align-self: flex-start;
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    font-size: var(--font-size-text);
+    cursor: pointer;
 }
 
 /* ========== Reduced motion ========== */

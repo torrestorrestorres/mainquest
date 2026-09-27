@@ -31,6 +31,10 @@ Unter `/admin/` werden Events gepflegt (Texte, Datum, Titelbild, Galerie). Bilde
 
 Entwürfe sind nur für eingeloggte Benutzer sichtbar (Vorschau).
 
+**Anfragen:** Das Kontaktformular (`/kontakt`) speichert jede Nachricht und benachrichtigt die Empfänger aus den Einstellungen per Mail („Antworten“ geht direkt an den Absender). Im Admin unter „Anfragen“ mit Status Neu / In Bearbeitung / Erledigt. Spam-Schutz ohne Captcha: verstecktes Fallenfeld, Mindest-Ausfüllzeit, max. 5 Nachrichten pro Stunde und IP.
+
+**Einstellungen** (nur Admins): öffentliche Kontakt-Mail, Empfänger für Anfragen, Social-Media-Links.
+
 ## Aufbau
 
 ```
@@ -62,7 +66,7 @@ Push auf `develop` → Testseite, Push auf `main` → Live-Seite (`.github/workf
 Einmalige Einrichtung, sobald das Hosting steht:
 
 1. Beim Hoster: Subdomain `test.…` anlegen, Dokument-Verzeichnis auf `<ordner>/public` setzen, Passwortschutz aktivieren.
-2. Per FTP einmalig `app/config.php` auf dem Server anlegen (`env`, `debug => false`, `base_url`, `setup_token`, `mail` anpassen). Beim Hoster `upload_max_filesize` auf mind. 25M setzen.
+2. Per FTP einmalig `app/config.php` auf dem Server anlegen (`env`, `debug => false`, `base_url`, `setup_token`, `app_secret`, `mail` anpassen). Beim Hoster `upload_max_filesize` auf mind. 25M setzen.
 3. GitHub → Settings → Secrets and variables → Actions:
    - Secrets: `FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD`, `FTP_DIR_TEST`, `FTP_DIR_LIVE` (mit `/` am Ende)
    - Variable: `DEPLOY_ENABLED` = `true`

@@ -32,6 +32,8 @@ require APP_PATH . '/users.php';
 require APP_PATH . '/auth.php';
 require APP_PATH . '/mail.php';
 require APP_PATH . '/images.php';
+require APP_PATH . '/settings.php';
+require APP_PATH . '/contact.php';
 
 function config(string $key): mixed
 {

@@ -292,6 +292,7 @@ const NAV_LINKS = [
     { label: "Unsere Events", href: "/events", badge: "!" },
     { label: "Für Brands", href: "#" },
     { label: "Über Uns", href: "/#team" },
+    { label: "Kontakt", href: "/kontakt" },
 ];
 
 class MqNav extends MqElement {

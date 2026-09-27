@@ -10,9 +10,10 @@ RewriteBase /
 # hidden files are never served (except .well-known, needed for SSL certificates)
 RewriteRule (^|/)\.(?!well-known/) - [F]
 
-# clean URLs: /events and /events/<slug>
+# clean URLs (keep in sync with router.php)
 RewriteRule ^events/?$ events.php [L,QSA]
 RewriteRule ^events/([a-z0-9-]+)/?$ event.php?slug=$1 [L,QSA]
+RewriteRule ^kontakt/?$ kontakt.php [L,QSA]
 
 <IfModule mod_headers.c>
     Header always set X-Content-Type-Options "nosniff"

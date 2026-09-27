@@ -24,6 +24,8 @@ if (preg_match('#^/events/?$#', $path)) {
 } elseif (preg_match('#^/events/([a-z0-9-]+)/?$#', $path, $match)) {
     $_GET['slug'] = $match[1];
     $script = '/event.php';
+} elseif (preg_match('#^/kontakt/?$#', $path)) {
+    $script = '/kontakt.php';
 } else {
     // folders -> their index.php, direct .php URLs stay as they are
     $script = is_dir($public . $path) ? rtrim($path, '/') . '/index.php' : $path;

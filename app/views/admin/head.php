@@ -3,12 +3,13 @@
  * Admin page start: header with navigation + flash messages.
  * @var string     $title
  * @var array|null $user     logged-in user (null on login / setup / password pages)
- * @var string     $section  active menu item: events | users
+ * @var string     $section  active menu item: events | messages | users | settings
  */
 $user ??= null;
 $section ??= '';
-$navItem = fn(string $key, string $href, string $label) => sprintf(
-    '<a href="%s"%s>%s</a>', $href, $section === $key ? ' aria-current="page"' : '', e($label)
+$navItem = fn(string $key, string $href, string $label, int $count = 0) => sprintf(
+    '<a href="%s"%s>%s%s</a>', $href, $section === $key ? ' aria-current="page"' : '', e($label),
+    $count ? " <span class=\"nav-count\" aria-label=\"{$count} neu\">{$count}</span>" : ''
 );
 ?>
 <!DOCTYPE html>
@@ -29,8 +30,10 @@ $navItem = fn(string $key, string $href, string $label) => sprintf(
 <?php if ($user): ?>
     <nav class="admin-nav" aria-label="Admin">
         <?= $navItem('events', '/admin/', 'Events') ?>
+        <?= $navItem('messages', '/admin/messages.php', 'Anfragen', contact_messages_count('new')) ?>
 <?php if ($user['role'] === 'admin'): ?>
         <?= $navItem('users', '/admin/users.php', 'Benutzer') ?>
+        <?= $navItem('settings', '/admin/settings.php', 'Einstellungen') ?>
 <?php endif; ?>
         <a href="/" target="_blank">Website ↗</a>
     </nav>

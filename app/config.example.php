@@ -27,6 +27,9 @@ return [
     // (only works while there is no user yet). Use a long random string.
     'setup_token' => '',
 
+    // secret for signing (spam protection of the contact form). Long random string, never share.
+    'app_secret' => '',
+
     // logout after this many hours without activity
     'session_idle_hours' => 8,
 

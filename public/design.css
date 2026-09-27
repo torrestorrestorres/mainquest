@@ -33,6 +33,7 @@ Font sizes use clamp(min, fluid, max):
     --text-color-accent: #886830;
     --background-light: var(--text-color-light);
     --background-dark: var(--text-color-dark);
+    --color-error: #B3261E;
     --badge-background: var(--text-color-accent);
     --badge-color: var(--text-color-light);
     /* how far the badge sticks out to the right of the nav link */
